@@ -19,7 +19,7 @@ function main() {
             break;
     
         case 1:
-            convert(args[0], args[0] + '_out.log');
+            convert(args[0], args[0] + '_out.txt');
             break;
 
         case 2:
@@ -40,7 +40,7 @@ function convert(inputPath, outputPath) {
     }
     const rawLogs = fs.readFileSync(inputPath, 'utf8');
     const logs = rawLogs.split('\n\n');
-
+    console.log(logs.length)
     // output
     const writer = fs.createWriteStream(outputPath, { flags: 'w' });
       
@@ -49,15 +49,14 @@ function convert(inputPath, outputPath) {
     // const logs = rawLogs.split('\n').slice(0,50).join('\n');
     // const reg = new RegExp('\[\d\d-\d\d \d\d:\d\d:\d\d.\d\d\d \d{2,}:\d{2,} [A-Z].*\]\n.*\n', 'g');
     // console.log(logs.match(reg));
-    let cnt = 0;
     for (const log of logs) {
         const lines = log.split('\n');
         while (lines.length && !reg.test(lines[0])) {
             const trash = lines.shift();
-            // console.log('trash: ' + trash); // for debug
+            console.log('trash: ' + trash); // for debug
         }
         if (!lines.length) {
-            break;
+            continue;
         }
         const info = lines.shift().slice(1, -1).split(' ');
         const data = lines.join(' ');
